@@ -1,0 +1,58 @@
+# Class Amp1_LevelFrame shows amps for slot 1
+class Amp1_LabelFrame:
+	"""Pane for displaying Controller Alarms"""
+	def __init__(self, master, bpObject, grid_row=0):
+		self.master = master
+		self.bpObject = bpObject
+		self.bottom_row_label = ttk.Label(master, text="Value : ")
+		self.status1_label = StateLabel(master, text="STATUS 1", statevariable=bpObject.ampFail_bit)
+
+		self.bottom_row_label.grid(row=grid_row, column=0, sticky="news")
+		self.status1_label.grid(row=grid_row, column=1, sticky="news")
+
+# Class Amp1_LevelFrame shows amps for slot 2
+class Amp2_LabelFrame:
+	"""Pane for displaying Controller Alarms"""
+	def __init__(self, master, bpObject, grid_row=0):
+		self.master = master
+		self.bpObject = bpObject
+		self.bottom_row_label = ttk.Label(master, text="Value : ")
+
+		self.status1_label = StateLabel(
+			master,
+			text="STATUS 2",
+			statevariable=self.bpObject.ampFail_bit)
+
+		self.bottom_row_label.grid(row=grid_row, column=0, sticky="news")
+		self.status1_label.grid(row=grid_row, column=1, sticky="news")
+
+
+# Class Amp1_LevelFrame shows amps for slot 3
+class Amp3_LabelFrame:
+	"""Pane for displaying Controller Alarms"""
+	def __init__(self, master, bpObject, grid_row=0):
+		self.master = master
+		self.bpObject = bpObject
+		self.bottom_row_label = ttk.Label(master, text="Value : ")
+		self.status1_label = StateLabel(
+			master,
+			text="STATUS 3",
+			statevariable=self.bpObject.ampFail_bit)
+
+		self.bottom_row_label.grid(row=grid_row, column=0, sticky="news")
+		self.status1_label.grid(row=grid_row, column=1, sticky="news")
+
+# Class Amp1_LevelFrame shows amps for slot 4
+class Amp4_LabelFrame:
+	"""Pane for displaying Controller Alarms"""
+	def __init__(self, master, bpObject, grid_row=0):
+		self.master = master
+		self.bpObject = bpObject
+		self.bottom_row_label = ttk.Label(master, text="Value : ")
+		self.status1_label = StateLabel(
+			master,
+			text="STATUS 4",
+			statevariable=self.bpObject.ampFail_bit)
+
+		self.bottom_row_label.grid(row=grid_row, column=0, sticky="news")
+		self.status1_label.grid(row=grid_row, column=1, sticky="news")
