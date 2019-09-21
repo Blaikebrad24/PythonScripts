@@ -1,0 +1,178 @@
+class ControllerFrame(ttk.Frame):
+	"""Frame for all controller data and control"""
+	def __init__(self, master, data):
+		super().__init__(master)
+		self.master = master
+		self.data = data
+		self.status_group = ttk.Frame(self)
+		self.other_status_group = ttk.Frame(self.status_group)
+		self.easyname_entry = ttk.Entry(self, textvariable=data.easy_name)
+		self.serial_group = ttk.Frame(self.other_status_group)
+
+
+
+
+		self.headend_remote_label = ttk.Label(
+			self.serial_group,
+			textvariable=data.device_subtype
+		)
+		self.serial_label = ttk.Label(
+			self.serial_group,
+			textvariable=data.serial_number
+		)
+		self.voltage_group = ttk.Frame(self.other_status_group)
+		self.ac_label = ttk.Label(
+			self.voltage_group,
+			text="Power Supply:"
+		)
+		self.ac_level_label = ttk.Label(
+			self.voltage_group,
+			textvariable=data.ac_level
+		)
+		self.config_button = ttk.Button(self.other_status_group,
+										command=self.channel_card_config_dialog,
+										text="Setup...")
+		# self.batt_label = ttk.Label(
+		#     self.voltage_group,
+		#     text="Battery Voltage:"
+		# )
+		# self.batt_level_label = ttk.Label(
+		#     self.voltage_group,
+		#     textvariable=data.batt_level
+		# )
+		self.alarms_pane = ttk.LabelFrame(self.status_group, text="Alarms")
+		self.alarms_row = AlarmsRow(self.alarms_pane, data.alarms, 0)
+		self.latched_row = LatchedAlarmsRow(
+			self.alarms_pane,
+			data.latched_alarms,
+			1
+		)
+
+
+
+		# uplink_cards = {addr: card
+		#                 for (addr, card) in self.data.cards.items()
+		#                 if addr >= c.TWI_UL_OFFSET}
+		# self.uplink_cards = CardGrid(
+		#     self,
+		#     uplink_cards,
+		#     data.status.is_headend.get() != '0',
+		#     True
+		# )
+
+		self.easyname_entry.pack()
+		self.serial_group.pack()
+		self.headend_remote_label.pack(side=tk.LEFT)
+		self.serial_label.pack(side=tk.LEFT)
+
+		self.voltage_group.pack()
+		self.ac_label.pack(side=tk.LEFT)
+		self.ac_level_label.pack(side=tk.LEFT)
+
+		# self.batt_label.pack(side=tk.LEFT)
+		# self.batt_level_label.pack(side=tk.LEFT)
+		self.config_button.pack()
+		self.other_status_group.pack(side=tk.LEFT, padx=50)
+		self.alarms_pane.pack(side=tk.LEFT)
+		self.status_group.pack()
+		count = 1
+		self.note = ttk.Notebook(self)
+
+
+
+
+
+		for bp_id, bp in self.data.backplanes.items():
+				backplane_count = len(self.data.backplanes.items())
+				if backplane_count == 1:
+					cards = {bp_id: card for (bp_id, card) in bp.cards.items()}
+
+					self.mainTab = ttk.Frame(self.note)
+					#cards = {bp_id: card for (bp_id, card) in bp.cards.items()}
+					#print(len(self.data.backplanes.items()))
+					self.downlink_cards = CardGrid(self.mainTab, cards,
+										data.status.is_headend.get() is not False
+										and data.status.is_headend.get() != '0'
+										and data.status.is_headend.get() != 'False',
+										False)
+					self.downlink_cards.pack(fill=tk.X) #adds cards to Frame
+
+					### Adding Amp 1 to the Controller frame inside label Frame
+					self.bottomFrame = ttk.LabelFrame(self.added_Tab, text="Amp 1")
+					self.amp1_bottom_level = Amp1_LabelFrame(self.bottomFrame, bp, 0)
+					self.bottomFrame.pack(side=LEFT, expand=TRUE)
+
+					### Adding Amp 2 to the Controller frame inside label Frame
+					self.bottomFrame2 = ttk.LabelFrame(self.added_Tab, text="Amp 2")
+					self.amp2_bottom_label = Amp2_LabelFrame(self.bottomFrame2, bp, 0)
+					self.bottomFrame2.pack(side=LEFT, padx=5, expand=TRUE)
+
+					### Adding Amp 4 to the Controller frame inside label Frame
+					self.bottomFrame4 = ttk.LabelFrame(self.added_Tab, text="Amp 4")
+					self.amp4_bottom_label = Amp4_LabelFrame(self.bottomFrame4, bp, 0)
+					self.bottomFrame4.pack(side=RIGHT, padx=5, expand=TRUE)
+
+					### Adding Amp 3 to the Controller frame inside label Frame
+					self.bottomFrame3 = ttk.LabelFrame(self.added_Tab, text="Amp 3")
+					self.amp3_bottom_label = Amp3_LabelFrame(self.bottomFrame3, bp, 0)
+					self.bottomFrame3.pack(side=RIGHT, padx=5, expand=TRUE)
+
+					self.note.add(self.mainTab, text="Cage 1")
+
+				else:
+
+
+						#creates a card dictionary, assigns variables to data in dictionary
+						#loops through backplane data
+						#creates a frame within the Notebook object
+						#creates instance ob CardGrid class
+						#packs the instance of CardGrid inside the added Tab object inside the notebook
+						cards = {bp_id: card for (bp_id, card) in bp.cards.items()}
+
+						#print(len(self.data.backplanes.items()))
+
+						self.added_Tab = ttk.Frame(self.note)
+						self.theCard_added =  CardGrid(self.added_Tab, cards,
+											data.status.is_headend.get() is not False
+											and data.status.is_headend.get() != '0'
+											and data.status.is_headend.get() != 'False',
+											False)
+						self.theCard_added.pack(fill=tk.X)
+						# Adding Amp 1 to the Controller frame inside label Frame
+						self.bottomFrame = ttk.LabelFrame(self.added_Tab, text="Amp 1")
+						self.amp1_bottom_level = Amp1_LabelFrame(self.bottomFrame, bp, 0)
+						self.bottomFrame.pack(side=LEFT, expand=TRUE, fill= BOTH)
+
+						### Adding Amp 2 to the Controller frame inside label Frame
+						self.bottomFrame2 = ttk.LabelFrame(self.added_Tab, text="Amp 2")
+						self.amp2_bottom_label = Amp2_LabelFrame(self.bottomFrame2, bp, 0)
+						self.bottomFrame2.pack(side=LEFT, padx=5, expand=TRUE, fill= BOTH)
+
+						### Adding Amp 4 to the Controller frame inside label Frame
+						self.bottomFrame4 = ttk.LabelFrame(self.added_Tab, text="Amp 4")
+						self.amp4_bottom_label = Amp4_LabelFrame(self.bottomFrame4, bp, 0)
+						self.bottomFrame4.pack(side=RIGHT, padx=5, expand=TRUE, fill= BOTH)
+
+						### Adding Amp 3 to the Controller frame inside label Frame
+						self.bottomFrame3 = ttk.LabelFrame(self.added_Tab, text="Amp 3")
+						self.amp3_bottom_label = Amp3_LabelFrame(self.bottomFrame3, bp, 0)
+						self.bottomFrame3.pack(side=RIGHT, padx=5, expand=TRUE, fill= BOTH)
+
+
+
+						self.note.add(self.added_Tab, text="Cage " + str(count))
+						count+=1
+
+				#
+
+		#self.added_bottom_levels = BottomLevelRow(self.added_Tab, data.alarms, 0)
+		#self.added_bottom_levels.pack(side=tk.X)
+		self.note.pack(fill=tk.X)
+
+
+		#self.downlink_cards.pack(fill=tk.X)
+		# self.uplink_cards.pack(fill=tk.X)
+
+	def channel_card_config_dialog(self):
+		ControllerConfigDialog(self.master.master, self.data)
+
